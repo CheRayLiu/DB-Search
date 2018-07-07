@@ -3,6 +3,7 @@
 import tkinter as tk
 import pymysql
 from tkinter import ttk
+from tkinter import *
 def db(colnames,e1,e2,e3,e4,e5,c1,c2):
     # Open database connection
     db = pymysql.connect(host=str(e1),user =str(e2), passwd=str(e3) ,db =str(e4))
@@ -23,13 +24,28 @@ def db(colnames,e1,e2,e3,e4,e5,c1,c2):
                 string += str(column)
                 string += " "
             string+= "\n"
-        popupmsg("",string)
+        popupdb(data)
         
     # disconnect from server
     else:
         popupmsg("","Please select at least one checkbox")
     db.close()
+def popupdb(result):
+    root = tk.Tk()
+    tree = ttk.Treeview(root)
+    tree["columns"] = ("one", "two")
+    tree.column("one", width=100)
+    tree.column("two", width=100)
 
+ 
+    tree.heading("one", text="NAME")
+    tree.heading("two", text="VOTES")
+    for item in result:
+       tree.insert('', 'end', values=(item[0], item[1]))
+    tree.pack()
+    root.mainloop()
+
+    
 def popupmsg(msg, result):
     popup = tk.Tk()
     def leavemini():
